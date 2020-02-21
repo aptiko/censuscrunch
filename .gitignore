@@ -1,0 +1,10 @@
+*.pyc
+*.egg
+*.egg-info
+doc/_build
+dist
+fmcsa_census_project/settings/local.py
+fmcsa_census_project/db.sqlite3
+
+# Selenium log files
+*driver.log
