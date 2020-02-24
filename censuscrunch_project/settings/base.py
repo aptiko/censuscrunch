@@ -60,3 +60,5 @@ USE_L10N = False
 USE_TZ = True
 
 STATIC_URL = "/static/"
+
+CENSUSCRUNCH_ROW_LIMIT = 50_000

@@ -11,6 +11,13 @@
     in a more convenient way. <strong>No warranties!</strong>
   </p>
   {% include "censuscrunch/search/form.html" %}
-  <p>{{ page_obj.paginator.count|intcomma }} records</p>
-  {% include "censuscrunch/search/table.html" %}
+  {% if page_obj.paginator.count > row_limit %}
+    <p>
+      This search returns {{ page_obj.paginator.count|intcomma }} rows.
+      Change it so that it returns at most {{ row_limit }} rows.
+    </p>
+  {% else %}
+    <p>{{ page_obj.paginator.count|intcomma }} records</p>
+    {% include "censuscrunch/search/table.html" %}
+  {% endif %}
 {% endblock %}
