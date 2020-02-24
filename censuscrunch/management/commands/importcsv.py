@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.db.utils import DataError, IntegrityError
 
-from fmcsa_census.models import Carrier
+from censuscrunch.models import Carrier
 
 CarrierAttribute = namedtuple("CarrierAttribute", ["name", "conversion_function"])
 

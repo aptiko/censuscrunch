@@ -6,7 +6,7 @@ from . import models
 class SearchView(ListView):
     model = models.Carrier
     paginate_by = 100
-    template_name = "fmcsa_census/search/main.html"
+    template_name = "censuscrunch/search/main.html"
 
     def get_queryset(self):
         qs = super().get_queryset()

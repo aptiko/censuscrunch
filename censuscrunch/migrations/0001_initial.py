@@ -271,44 +271,44 @@ class Migration(migrations.Migration):
             model_name="carrier",
             index=models.Index(
                 fields=["physical_state", "physical_zip", "physical_address"],
-                name="fmcsa_censu_physica_451dd3_idx",
+                name="censuscrunc_physica_451dd3_idx",
             ),
         ),
         migrations.AddIndex(
             model_name="carrier",
             index=models.Index(
                 fields=["mailing_state", "mailing_zip", "mailing_address"],
-                name="fmcsa_censu_mailing_4e0b4a_idx",
+                name="censuscrunc_mailing_4e0b4a_idx",
             ),
         ),
         migrations.AddIndex(
             model_name="carrier",
             index=models.Index(
-                fields=["mcs150_date"], name="fmcsa_censu_mcs150__96aae2_idx"
+                fields=["mcs150_date"], name="censuscrunc_mcs150__96aae2_idx"
             ),
         ),
         migrations.AddIndex(
             model_name="carrier",
             index=models.Index(
-                fields=["date_added_mcmis"], name="fmcsa_censu_date_ad_5489d6_idx"
+                fields=["date_added_mcmis"], name="censuscrunc_date_ad_5489d6_idx"
             ),
         ),
         migrations.AddIndex(
             model_name="carrier",
             index=models.Index(
-                fields=["oic_state"], name="fmcsa_censu_oic_sta_e5e7f0_idx"
+                fields=["oic_state"], name="censuscrunc_oic_sta_e5e7f0_idx"
             ),
         ),
         migrations.AddIndex(
             model_name="carrier",
             index=models.Index(
-                fields=["number_of_power_units"], name="fmcsa_censu_number__824d97_idx"
+                fields=["number_of_power_units"], name="censuscrunc_number__824d97_idx"
             ),
         ),
         migrations.AddIndex(
             model_name="carrier",
             index=models.Index(
-                fields=["number_of_drivers"], name="fmcsa_censu_number__c503f2_idx"
+                fields=["number_of_drivers"], name="censuscrunc_number__c503f2_idx"
             ),
         ),
     ]

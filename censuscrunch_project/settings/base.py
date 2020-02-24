@@ -13,7 +13,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
-    "fmcsa_census",
+    "censuscrunch",
 ]
 
 MIDDLEWARE = [
@@ -26,7 +26,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "fmcsa_census_project.urls"
+ROOT_URLCONF = "censuscrunch_project.urls"
 
 TEMPLATES = [
     {
@@ -44,7 +44,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "fmcsa_census_project.wsgi.application"
+WSGI_APPLICATION = "censuscrunch_project.wsgi.application"
 
 DATABASES = {
     "default": {
