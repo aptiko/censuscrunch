@@ -1,6 +1,5 @@
 from django.db import models
 
-
 CARRIER_OPERATION_CHOICES = (
     ("A", "Interstate"),
     ("B", "Intrastate Hazmat"),
