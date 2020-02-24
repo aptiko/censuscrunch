@@ -1,0 +1,16 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>DOT number</th>
+      <th>Legal name</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for object in object_list %}
+      <tr>
+        <td>{{ object.dot_number }}</td>
+        <td>{{ object.legal_name }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

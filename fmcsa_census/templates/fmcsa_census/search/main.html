@@ -1,0 +1,16 @@
+{% extends "fmcsa_census/base.html" %}
+{% load humanize %}
+
+{% block content %}
+  <h1 class="title">
+    The Census Crunch
+  </h1>
+  <p>
+    We just provide the
+    <a href="https://ai.fmcsa.dot.gov/SMS/Tools/Downloads.aspx">FMCSA census data</a>
+    in a more convenient way. <strong>No warranties!</strong>
+  </p>
+  {% include "fmcsa_census/search/form.html" %}
+  <p>{{ page_obj.paginator.count|intcomma }} records</p>
+  {% include "fmcsa_census/search/table.html" %}
+{% endblock %}
