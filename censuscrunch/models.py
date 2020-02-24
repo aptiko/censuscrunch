@@ -107,6 +107,7 @@ class Carrier(models.Model):
             models.Index(fields=["number_of_power_units"]),
             models.Index(fields=["number_of_drivers"]),
         ]
+        ordering = ("dot_number",)
 
     def __str__(self):
         return f"{self.legal_name} ({self.dot_number})"

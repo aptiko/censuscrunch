@@ -21,4 +21,3 @@ class SearchView(ListView):
         if max_power_units:
             qs = qs.filter(number_of_power_units__lte=max_power_units)
         return qs
-
