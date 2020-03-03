@@ -9,7 +9,7 @@
     {% for object in object_list %}
       <tr>
         <td>{{ object.dot_number }}</td>
-        <td>{{ object.legal_name }}</td>
+        <td><a href="{% url "carrier_detail" object.id %}">{{ object.legal_name }}</a></td>
       </tr>
     {% endfor %}
   </tbody>

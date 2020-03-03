@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
 from . import models
@@ -27,3 +28,8 @@ class SearchView(ListView):
         context = super().get_context_data(**kwargs)
         context["row_limit"] = settings.CENSUSCRUNCH_ROW_LIMIT
         return context
+
+
+class CarrierDetailView(DetailView):
+    model = models.Carrier
+    template_name_suffix = "_detail/main"

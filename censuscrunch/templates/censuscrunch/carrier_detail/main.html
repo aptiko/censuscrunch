@@ -1,0 +1,49 @@
+{% extends "censuscrunch/base.html" %}
+{% load humanize %}
+
+{% block content %}
+  <div class="content">
+    <h1>{% if object.dba_name %}{{ object.dba_name }}{% else %}{{ object.legal_name }}{% endif %}</h1>
+    <table class="table">
+      <tbody>
+        <tr><th>DOT number</th><td>{{ object.dot_number }}</td></tr>
+        <tr><th>Legal name</th><td>{{ object.legal_name }}</td></tr>
+        <tr><th>Doing-business-as name</th><td>{{ object.dba_name }}</td></tr>
+        <tr>
+          <th>Type of operation</th>
+          <td>
+            {{ object.carrier_operation }} ({{ object.get_carrier_operation_display }})
+          </td>
+        </tr>
+        <tr><th>Subject to placardable HM threshold</th><td>{{ object.hm|yesno:"Yes,No" }}</td></tr>
+        <tr><th>Subject to Passenger Carrier threshold</th><td>{{ object.pc|yesno:"Yes,No" }}</td></tr>
+        <tr>
+          <th>Physical address</th>
+          <td>
+            {{ object.physical_address }},
+            {{ object.physical_city }},
+            {{ object.physical_state }} {{ object.physical_zip }}
+          </td>
+        </tr>
+        <tr>
+          <th>Mailing address</th>
+          <td>
+            {{ object.mailing_address }},
+            {{ object.mailing_city }},
+            {{ object.mailing_state }} {{ object.mailing_zip }}
+          </td>
+        </tr>
+        <tr><th>Tel.</th><td>{{ object.tel }}</td></tr>
+        <tr><th>Fax</th><td>{{ object.fax }}</td></tr>
+        <tr><th>Email</th><td>{{ object.email }}</td></tr>
+        <tr><th>Latest date MCS-150 was filed</th><td>{{ object.mcs150_date }}</td></tr>
+        <tr><th>Vehicle Mileage Traveled (VMT) reported on MCS-150 form</th><td>{{ object.mcs150_mileage|intcomma }}</td></tr>
+        <tr><th>Year for which VMT was reported</th><td>{{ object.mcs150_mileage_year }}</td></tr>
+        <tr><th>Date information was added to MCMIS database</th><td>{{ object.date_added_mcmis }}</td></tr>
+        <tr><th>Overseeing FMCSA state office</th><td>{{ object.oic_state }}</td></tr>
+        <tr><th>Number of power units</th><td>{{ object.number_of_power_units }}</td></tr>
+        <tr><th>Number of power drivers</th><td>{{ object.number_of_drivers }}</td></tr>
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
