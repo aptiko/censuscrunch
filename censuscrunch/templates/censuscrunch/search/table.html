@@ -11,7 +11,7 @@
   <tbody>
     {% for object in object_list %}
       <tr>
-        <td><a href="{% url "carrier_detail" object.id %}">{% if object.dba_name %}{{ object.dba_name|truncatechars:30 }}{% else %}{{ object.legal_name|truncatechars:30 }}{% endif %}</a></td>
+        <td><a href="{% url "carrier_detail" object.id %}">{{ object|truncatechars:30 }}</a></td>
         <td>{{ object.physical_state }}</td>
         <td>{{ object.number_of_power_units }}</td>
         <td>{{ object.number_of_drivers }}</td>

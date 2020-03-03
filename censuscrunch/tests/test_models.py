@@ -47,9 +47,23 @@ class CarrierTestCase(TestCase):
         carrier.delete()
         self.assertEqual(models.Carrier.objects.count(), 0)
 
-    def test_str(self):
-        carrier = mommy.make(models.Carrier, dot_number=42, legal_name="Killer Carrier")
-        self.assertEqual(str(carrier), "Killer Carrier (42)")
+    def test_str_when_has_dba_name(self):
+        carrier = mommy.make(
+            models.Carrier,
+            dot_number=42,
+            legal_name="Killer Carrier, Inc",
+            dba_name="Killer Carrier",
+        )
+        self.assertEqual(str(carrier), "Killer Carrier")
+
+    def test_str_when_has_no_dba_name(self):
+        carrier = mommy.make(
+            models.Carrier,
+            dot_number=42,
+            legal_name="Killer Carrier, Inc",
+            dba_name="",
+        )
+        self.assertEqual(str(carrier), "Killer Carrier, Inc")
 
     def test_email_local_part(self):
         mommy.make(models.Carrier, email="hello@world.com")

@@ -110,7 +110,7 @@ class Carrier(models.Model):
         ordering = ("dot_number",)
 
     def __str__(self):
-        return f"{self.legal_name} ({self.dot_number})"
+        return self.dba_name or self.legal_name
 
     @property
     def email_local_part(self):

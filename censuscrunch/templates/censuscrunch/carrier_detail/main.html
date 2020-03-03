@@ -1,9 +1,15 @@
 {% extends "censuscrunch/base/main.html" %}
 {% load humanize %}
 
+
+{% block title %}
+  {{ object }}
+{% endblock %}
+
+
 {% block content %}
   <div class="content">
-    <h1>{% if object.dba_name %}{{ object.dba_name }}{% else %}{{ object.legal_name }}{% endif %}</h1>
+    <h1>{{ object }}</h1>
     <table class="table">
       <tbody>
         <tr><th>DOT number</th><td>{{ object.dot_number }}</td></tr>
