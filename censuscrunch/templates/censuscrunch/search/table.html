@@ -1,15 +1,21 @@
 <table class="table">
   <thead>
     <tr>
-      <th>DOT number</th>
-      <th>Legal name</th>
+      <th>Name</th>
+      <th>State</th>
+      <th>Power units</th>
+      <th>Drivers</th>
+      <th>Email</th>
     </tr>
   </thead>
   <tbody>
     {% for object in object_list %}
       <tr>
-        <td>{{ object.dot_number }}</td>
-        <td><a href="{% url "carrier_detail" object.id %}">{{ object.legal_name }}</a></td>
+        <td><a href="{% url "carrier_detail" object.id %}">{% if object.dba_name %}{{ object.dba_name|truncatechars:30 }}{% else %}{{ object.legal_name|truncatechars:30 }}{% endif %}</a></td>
+        <td>{{ object.physical_state }}</td>
+        <td>{{ object.number_of_power_units }}</td>
+        <td>{{ object.number_of_drivers }}</td>
+        <td><a href="mailto:{{ object.email }}">{{ object.email|truncatechars:30 }}</a></td>
       </tr>
     {% endfor %}
   </tbody>

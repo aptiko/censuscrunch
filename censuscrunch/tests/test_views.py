@@ -42,7 +42,7 @@ class CarrierListRowLimitTestCase(TestCase):
 
     def test_no_results_if_above_row_limit(self):
         r = self.client.get("/")
-        self.assertNotContains(r, "DOT number")
+        self.assertNotContains(r, "Name")
 
 
 class CarrierDetailTestCase(TestCase):
