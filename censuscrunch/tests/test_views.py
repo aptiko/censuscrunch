@@ -103,3 +103,28 @@ class CarrierDetailTestCase(TestCase):
     def test_carrier_operation(self):
         r = self.client.get("/carriers/7/")
         self.assertContains(r, "C (Intrastate Non-Hazmat)", html=True)
+
+
+class NullValuesTestCase(TestCase):
+    """Make sure nulls are shown as empty, not as the word "None".
+    """
+
+    def setUp(self):
+        mommy.make(
+            models.Carrier,
+            id=7,
+            legal_name="Killer Carrier",
+            mcs150_date=None,
+            mcs150_mileage=None,
+            mcs150_mileage_year=None,
+            number_of_power_units=None,
+            number_of_drivers=None,
+        )
+
+    def test_no_none_in_carrier_list(self):
+        r = self.client.get("/?q=killer")
+        self.assertNotContains(r, "None")
+
+    def test_no_none_in_detail(self):
+        r = self.client.get("/carriers/7/")
+        self.assertNotContains(r, "None")

@@ -13,8 +13,8 @@
       <tr>
         <td><a href="{% url "carrier_detail" object.id %}">{{ object|truncatechars:30 }}</a></td>
         <td>{{ object.physical_state }}</td>
-        <td>{{ object.number_of_power_units }}</td>
-        <td>{{ object.number_of_drivers }}</td>
+        <td>{{ object.number_of_power_units|default_if_none:"" }}</td>
+        <td>{{ object.number_of_drivers|default_if_none:"" }}</td>
         <td>{{ object.email_with_link|safe }}</a></td>
       </tr>
     {% endfor %}
