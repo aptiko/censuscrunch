@@ -111,3 +111,25 @@ class Carrier(models.Model):
 
     def __str__(self):
         return f"{self.legal_name} ({self.dot_number})"
+
+    @property
+    def email_local_part(self):
+        if "@" in self.email:
+            return self.email.split("@")[0]
+        else:
+            return ""
+
+    @property
+    def email_domain(self):
+        if "@" in self.email:
+            return self.email.split("@")[1]
+        else:
+            return ""
+
+    @property
+    def email_with_link(self):
+        if "@" in self.email:
+            domain = self.email_domain
+            return f'{self.email_local_part}@<a href="http://{domain}">{domain}</a>'
+        else:
+            return ""

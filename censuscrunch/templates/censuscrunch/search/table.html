@@ -15,7 +15,7 @@
         <td>{{ object.physical_state }}</td>
         <td>{{ object.number_of_power_units }}</td>
         <td>{{ object.number_of_drivers }}</td>
-        <td><a href="mailto:{{ object.email }}">{{ object.email|truncatechars:30 }}</a></td>
+        <td>{{ object.email_with_link|safe }}</a></td>
       </tr>
     {% endfor %}
   </tbody>

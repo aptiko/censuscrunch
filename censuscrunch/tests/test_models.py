@@ -50,3 +50,22 @@ class CarrierTestCase(TestCase):
     def test_str(self):
         carrier = mommy.make(models.Carrier, dot_number=42, legal_name="Killer Carrier")
         self.assertEqual(str(carrier), "Killer Carrier (42)")
+
+    def test_email_local_part(self):
+        mommy.make(models.Carrier, email="hello@world.com")
+        self.assertEqual(models.Carrier.objects.first().email_local_part, "hello")
+
+    def test_email_domain(self):
+        mommy.make(models.Carrier, email="hello@world.com")
+        self.assertEqual(models.Carrier.objects.first().email_domain, "world.com")
+
+    def test_email_with_link(self):
+        mommy.make(models.Carrier, email="hello@world.com")
+        self.assertEqual(
+            models.Carrier.objects.first().email_with_link,
+            'hello@<a href="http://world.com">world.com</a>',
+        )
+
+    def test_email_with_link_when_empty(self):
+        mommy.make(models.Carrier, email="")
+        self.assertEqual(models.Carrier.objects.first().email_with_link, "")
