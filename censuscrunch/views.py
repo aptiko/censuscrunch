@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db.models import Q
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
@@ -19,6 +20,20 @@ class SearchView(ListView):
         return qs
 
     def _filter_queryset(self, qs):
+        qs = self._filter_by_simple_search_term(qs)
+        qs = self._filter_by_number_of_power_units(qs)
+        return qs
+
+    def _filter_by_simple_search_term(self, qs):
+        search_term = self.request.GET.get("q")
+        if search_term:
+            qs = qs.filter(
+                Q(legal_name__icontains=search_term)
+                | Q(dba_name__icontains=search_term)
+            )
+        return qs
+
+    def _filter_by_number_of_power_units(self, qs):
         min_power_units = self.request.GET.get("min_number_of_power_units")
         max_power_units = self.request.GET.get("max_number_of_power_units")
         if min_power_units:

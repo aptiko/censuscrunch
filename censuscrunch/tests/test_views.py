@@ -7,9 +7,30 @@ from censuscrunch import models
 
 class CarrierListViewTestCase(TestCase):
     def setUp(self):
-        mommy.make(models.Carrier, id=1, dot_number=42, number_of_power_units=5)
-        mommy.make(models.Carrier, id=2, dot_number=43, number_of_power_units=10)
-        mommy.make(models.Carrier, id=3, dot_number=44, number_of_power_units=15)
+        mommy.make(
+            models.Carrier,
+            id=1,
+            dot_number=42,
+            number_of_power_units=5,
+            legal_name="Killer Carrier, Inc",
+            dba_name="Killer Carrier",
+        )
+        mommy.make(
+            models.Carrier,
+            id=2,
+            dot_number=43,
+            number_of_power_units=10,
+            legal_name="Transport Greatness",
+            dba_name="",
+        )
+        mommy.make(
+            models.Carrier,
+            id=3,
+            dot_number=44,
+            number_of_power_units=15,
+            legal_name="Jociel",
+            dba_name="Johnson Logistics",
+        )
 
     def test_no_queries_when_no_query(self):
         with self.assertNumQueries(0):
@@ -30,6 +51,22 @@ class CarrierListViewTestCase(TestCase):
     def test_link_to_detail(self):
         r = self.client.get("/?max_number_of_power_units=11")
         self.assertContains(r, '<a href="/carriers/2/">')
+
+    def test_simple_search1(self):
+        r = self.client.get("/?q=killer")
+        self.assertContains(r, "1 records")
+        self.assertContains(r, "Killer Carrier")
+
+    def test_simple_search2(self):
+        r = self.client.get("/?q=great")
+        self.assertContains(r, "1 records")
+        self.assertContains(r, "Transport Greatness")
+
+    def test_simple_search3(self):
+        r = self.client.get("/?q=a")
+        self.assertContains(r, "2 records")
+        self.assertContains(r, "Killer Carrier")
+        self.assertContains(r, "Transport Greatness")
 
 
 @override_settings(CENSUSCRUNCH_ROW_LIMIT=2)

@@ -1,20 +1,43 @@
 <form method="get" action="">
   <div class="field is-horizontal">
-    <div class="field-label">
-      Only show carriers where number of power units is between
+    <div class="field-label is-normal">
+      <label class="label">Search for</label>
     </div>
-    <div class="field-body is-grouped field">
-      <div class="control">
-        <input class="input" type="text" name="min_number_of_power_units" size="5">
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <input class="input" type="text" name="q" size=20>
+        </div>
       </div>
-      <div class="control">
-        and
+    </div>
+  </div>
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class=label>
+        Number of trucks
+      </label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <input class="input" type="text" name="min_number_of_power_units" placeholder="Min" size="5">
+        </div>
       </div>
-      <div class="control">
-        <input class="input" type="text" name="max_number_of_power_units" size="5">
+      <div class="field">
+        <div class="control">
+          <input class="input" type="text" name="max_number_of_power_units" placeholder="Max" size="5">
+        </div>
       </div>
-      <div class="control">
-        <input type="submit" value="Submit" class="button is-primary">
+    </div>
+  </div>
+  <div class="field is-horizontal">
+    <div class="field-label">
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <input type="submit" value="Submit" class="button is-primary">
+        </div>
       </div>
     </div>
   </div>
