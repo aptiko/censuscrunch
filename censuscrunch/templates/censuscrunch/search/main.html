@@ -21,7 +21,7 @@
       This search returns {{ page_obj.paginator.count|intcomma }} rows.
       Change it so that it returns at most {{ row_limit }} rows.
     </p>
-  {% else %}
+  {% elif searched %}
     <p>{{ page_obj.paginator.count|intcomma }} records</p>
     {% include "censuscrunch/search/table.html" %}
   {% endif %}

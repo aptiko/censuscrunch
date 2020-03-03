@@ -11,8 +11,11 @@ class SearchView(ListView):
     template_name = "censuscrunch/search/main.html"
 
     def get_queryset(self):
-        qs = super().get_queryset()
-        qs = self._filter_queryset(qs)
+        if self.request.GET:
+            qs = super().get_queryset()
+            qs = self._filter_queryset(qs)
+        else:
+            qs = self.model.objects.none()
         return qs
 
     def _filter_queryset(self, qs):
@@ -27,6 +30,7 @@ class SearchView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["row_limit"] = settings.CENSUSCRUNCH_ROW_LIMIT
+        context["searched"] = bool(self.request.GET)
         return context
 
 

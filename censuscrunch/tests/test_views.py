@@ -11,9 +11,13 @@ class CarrierListViewTestCase(TestCase):
         mommy.make(models.Carrier, id=2, dot_number=43, number_of_power_units=10)
         mommy.make(models.Carrier, id=3, dot_number=44, number_of_power_units=15)
 
-    def test_view_all(self):
+    def test_no_queries_when_no_query(self):
+        with self.assertNumQueries(0):
+            self.client.get("/")
+
+    def test_message_when_no_query(self):
         r = self.client.get("/")
-        self.assertContains(r, "3 records")
+        self.assertNotContains(r, "0 records")
 
     def test_filter_by_min_number_of_power_units(self):
         r = self.client.get("/?min_number_of_power_units=11")
@@ -24,7 +28,7 @@ class CarrierListViewTestCase(TestCase):
         self.assertContains(r, "2 records")
 
     def test_link_to_detail(self):
-        r = self.client.get("/")
+        r = self.client.get("/?max_number_of_power_units=11")
         self.assertContains(r, '<a href="/carriers/2/">')
 
 
@@ -36,12 +40,12 @@ class CarrierListRowLimitTestCase(TestCase):
         mommy.make(models.Carrier, dot_number=44, number_of_power_units=15)
 
     def test_row_limit_message(self):
-        r = self.client.get("/")
+        r = self.client.get("/?max_number_of_power_units=15")
         msg = "This search returns 3 rows. Change it so that it returns at most 2 rows."
         self.assertContains(r, msg, html=True)
 
     def test_no_results_if_above_row_limit(self):
-        r = self.client.get("/")
+        r = self.client.get("/?max_number_of_power_units=15")
         self.assertNotContains(r, "Name")
 
 
