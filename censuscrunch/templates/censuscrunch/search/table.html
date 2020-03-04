@@ -1,10 +1,12 @@
+{% load sorting %}
+
 <table class="table">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>State</th>
-      <th>Power units</th>
-      <th>Drivers</th>
+      <th>{% sorter "name" "Name" %}</th>
+      <th>{% sorter "physical_state" "State" %}</th>
+      <th>{% sorter "number_of_power_units" "Power units" %}</th>
+      <th>{% sorter "number_of_drivers" "Drivers" %}</th>
       <th>Email</th>
     </tr>
   </thead>

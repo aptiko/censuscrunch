@@ -1,5 +1,6 @@
 from django.test import TestCase, override_settings
 
+from bs4 import BeautifulSoup
 from model_mommy import mommy
 
 from censuscrunch import models
@@ -128,3 +129,93 @@ class NullValuesTestCase(TestCase):
     def test_no_none_in_detail(self):
         r = self.client.get("/carriers/7/")
         self.assertNotContains(r, "None")
+
+
+class TableSortTestCase(TestCase):
+    def setUp(self):
+        mommy.make(
+            models.Carrier,
+            id=1,
+            legal_name="Alice",
+            dba_name="Zalice",
+            physical_state="CA",
+            number_of_power_units=5,
+            number_of_drivers=5,
+        )
+        mommy.make(
+            models.Carrier,
+            id=2,
+            legal_name="Bob",
+            dba_name="Zbob",
+            physical_state="NY",
+            number_of_power_units=6,
+            number_of_drivers=4,
+        )
+        mommy.make(
+            models.Carrier,
+            id=3,
+            legal_name="Charlie",
+            dba_name="",
+            physical_state="MA",
+            number_of_power_units=7,
+            number_of_drivers=3,
+        )
+
+    def _get_sort_order(self, sort_terms):
+        response = self._make_request(sort_terms)
+        result = self._get_ids_from_response(response)
+        return result
+
+    def _make_request(self, sort_terms):
+        url = "/?min_number_of_power_units=1&max_number_of_power_units=10&"
+        url += "&".join([f"sort={x}" for x in sort_terms])
+        return self.client.get(url)
+
+    def _get_ids_from_response(self, response):
+        soup = BeautifulSoup(response.content, "lxml")
+        table_rows = soup.find("table").find_all("tr")
+        table_rows = table_rows[1:]  # Skip header
+        return [self._get_id_from_table_row(row) for row in table_rows]
+
+    def _get_id_from_table_row(self, row):
+        detail_url = row.td.a["href"]
+        result = int(detail_url.split("/")[2])
+        return result
+
+    def test_sort_by_name(self):
+        self.assertEqual(self._get_sort_order(["name"]), [3, 1, 2])
+
+    def test_sort_by_name_reverse(self):
+        self.assertEqual(self._get_sort_order(["-name"]), [2, 1, 3])
+
+    def test_sort_by_state(self):
+        self.assertEqual(self._get_sort_order(["physical_state"]), [1, 3, 2])
+
+    def test_sort_by_state_reverse(self):
+        self.assertEqual(self._get_sort_order(["-physical_state"]), [2, 3, 1])
+
+    def test_sort_by_number_of_power_units(self):
+        self.assertEqual(self._get_sort_order(["number_of_power_units"]), [1, 2, 3])
+
+    def test_sort_by_number_of_power_units_reverse(self):
+        self.assertEqual(self._get_sort_order(["-number_of_power_units"]), [3, 2, 1])
+
+    def test_sort_by_number_of_drivers(self):
+        self.assertEqual(self._get_sort_order(["number_of_drivers"]), [3, 2, 1])
+
+    def test_sort_by_number_of_drivers_reverse(self):
+        self.assertEqual(self._get_sort_order(["-number_of_drivers"]), [1, 2, 3])
+
+    def test_sort_with_multiple_criteria(self):
+        mommy.make(
+            models.Carrier,
+            id=4,
+            legal_name="David",
+            dba_name="",
+            physical_state="MA",
+            number_of_power_units=6,
+            number_of_drivers=4,
+        )
+        self.assertEqual(
+            self._get_sort_order(["number_of_power_units", "name"]), [1, 4, 2, 3]
+        )
