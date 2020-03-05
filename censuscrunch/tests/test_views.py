@@ -1,3 +1,6 @@
+import datetime as dt
+from io import StringIO
+
 from django.test import TestCase, override_settings
 
 from bs4 import BeautifulSoup
@@ -70,6 +73,95 @@ class CarrierListViewTestCase(TestCase):
         self.assertContains(r, "Transport Greatness")
 
 
+class CarrierListCsvTestCase(TestCase):
+    def setUp(self):
+        mommy.make(
+            models.Carrier,
+            dot_number=42,
+            legal_name="Killer Carrier, Inc",
+            dba_name="Killer Carrier",
+            carrier_operation="C",
+            hm=False,
+            pc=True,
+            physical_address="0 Abyss Alley",
+            physical_city="Nowhere",
+            physical_state="NY",
+            physical_zip="12345",
+            physical_country="US",
+            mailing_address="0 Abyss Alley",
+            mailing_city="Nowhere",
+            mailing_state="NY",
+            mailing_zip="12345",
+            mailing_country="US",
+            tel="+123456789",
+            fax="+198765432",
+            email="alicebrown@killercarrier.com",
+            mcs150_date=dt.date(2020, 3, 5),
+            mcs150_mileage=18725329,
+            mcs150_mileage_year=2020,
+            date_added_mcmis=dt.date(2019, 2, 4),
+            oic_state="MA",
+            number_of_power_units=5,
+            number_of_drivers=4,
+        )
+        mommy.make(
+            models.Carrier,
+            dot_number=43,
+            legal_name="Transport Greatness",
+            dba_name="",
+            carrier_operation="",
+            hm=True,
+            pc=False,
+            physical_address="",
+            physical_city="",
+            physical_state="",
+            physical_zip="",
+            physical_country="",
+            mailing_address="",
+            mailing_city="",
+            mailing_state="",
+            mailing_zip="",
+            mailing_country="",
+            tel="",
+            fax="",
+            email="",
+            mcs150_date=None,
+            mcs150_mileage=None,
+            mcs150_mileage_year=None,
+            date_added_mcmis=dt.date(2019, 1, 3),
+            oic_state="",
+            number_of_power_units=None,
+            number_of_drivers=None,
+        )
+
+    def test_csv(self):
+        r = self.client.get("/?q=r&format=csv")
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r["Content-Type"], "text/csv")
+        result = StringIO(r.content.decode())
+        header, first_line, second_line = result.readlines()
+        self.assertEqual(
+            header,
+            "DOT_NUMBER,LEGAL_NAME,DBA_NAME,CARRIER_OPERATION,HM_FLAG,PC_FLAG,"
+            "PHY_STREET,PHY_CITY,PHY_STATE,PHY_ZIP,PHY_COUNTRY,MAILING_STREET,"
+            "MAILING_CITY,MAILING_STATE,MAILING_ZIP,MAILING_COUNTRY,TELEPHONE,"
+            "FAX,EMAIL_ADDRESS,MCS150_DATE,MCS150_MILEAGE,MCS150_MILEAGE_YEAR,"
+            "ADD_DATE,OIC_STATE,NBR_POWER_UNIT,DRIVER_TOTAL\r\n",
+        )
+        self.assertEqual(
+            first_line,
+            '42,"Killer Carrier, Inc",Killer Carrier,C,N,Y,'
+            "0 Abyss Alley,Nowhere,NY,12345,US,0 Abyss Alley,"
+            "Nowhere,NY,12345,US,+123456789,"
+            "+198765432,alicebrown@killercarrier.com,05-MAR-20,18725329,2020,"
+            "04-FEB-19,MA,5,4\r\n",
+        )
+        self.assertEqual(
+            second_line,
+            "43,Transport Greatness,,,Y,N,,,,,,,,,,,,,,,,,03-JAN-19,,,\r\n",
+        )
+
+
 @override_settings(CENSUSCRUNCH_ROW_LIMIT=2)
 class CarrierListRowLimitTestCase(TestCase):
     def setUp(self):
@@ -85,6 +177,10 @@ class CarrierListRowLimitTestCase(TestCase):
     def test_no_results_if_above_row_limit(self):
         r = self.client.get("/?max_number_of_power_units=15")
         self.assertNotContains(r, "Name")
+
+    def test_no_csv_results_if_above_row_limit(self):
+        r = self.client.get("/?max_number_of_power_units=15&format=csv")
+        self.assertEqual(r.status_code, 400)
 
 
 class CarrierDetailTestCase(TestCase):

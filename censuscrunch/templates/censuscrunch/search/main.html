@@ -22,7 +22,11 @@
       Change it so that it returns at most {{ row_limit }} rows.
     </p>
   {% elif searched %}
-    <p>{{ page_obj.paginator.count|intcomma }} records</p>
+    <p>{{ page_obj.paginator.count|intcomma }} records
+      <a class="button is-primary is-pulled-right"
+        href="?{{ request.GET.urlencode }}&format=csv"
+        >Download these results as CSV</a>
+    </p>
     {% include "censuscrunch/search/table.html" %}
   {% endif %}
 {% endblock %}
