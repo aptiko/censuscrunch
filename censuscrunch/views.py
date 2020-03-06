@@ -104,7 +104,7 @@ class CsvResponse(HttpResponse):
 
     def _create_csv(self):
         self.csv = StringIO()
-        self.csvwriter = csv.writer(self.csv)
+        self.csvwriter = csv.writer(self.csv, quoting=csv.QUOTE_NONNUMERIC)
         self._add_csv_header()
         self._add_csv_body()
         return self.csv.getvalue()

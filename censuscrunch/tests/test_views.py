@@ -150,23 +150,28 @@ class CarrierListCsvTestCase(TestCase):
         header, first_line, second_line = result.readlines()
         self.assertEqual(
             header,
-            "DOT_NUMBER,LEGAL_NAME,DBA_NAME,CARRIER_OPERATION,HM_FLAG,PC_FLAG,"
-            "PHY_STREET,PHY_CITY,PHY_STATE,PHY_ZIP,PHY_COUNTRY,MAILING_STREET,"
-            "MAILING_CITY,MAILING_STATE,MAILING_ZIP,MAILING_COUNTRY,TELEPHONE,"
-            "FAX,EMAIL_ADDRESS,MCS150_DATE,MCS150_MILEAGE,MCS150_MILEAGE_YEAR,"
-            "ADD_DATE,OIC_STATE,NBR_POWER_UNIT,DRIVER_TOTAL\r\n",
+            '"DOT_NUMBER","LEGAL_NAME","DBA_NAME","CARRIER_OPERATION","HM_FLAG",'
+            '"PC_FLAG","PHY_STREET","PHY_CITY","PHY_STATE","PHY_ZIP","PHY_COUNTRY",'
+            '"MAILING_STREET","MAILING_CITY","MAILING_STATE","MAILING_ZIP",'
+            '"MAILING_COUNTRY","TELEPHONE","FAX","EMAIL_ADDRESS","MCS150_DATE",'
+            '"MCS150_MILEAGE","MCS150_MILEAGE_YEAR","ADD_DATE","OIC_STATE",'
+            '"NBR_POWER_UNIT","DRIVER_TOTAL"\r\n',
         )
         self.assertEqual(
             first_line,
-            '42,"Killer Carrier, Inc",Killer Carrier,C,N,Y,'
-            "0 Abyss Alley,Nowhere,NY,12345,US,0 Abyss Alley,"
-            "Nowhere,NY,12345,US,+123456789,"
-            "+198765432,alicebrown@killercarrier.com,05-MAR-20,18725329,2020,"
-            "04-FEB-19,MA,5,4\r\n",
+            '42,"Killer Carrier, Inc","Killer Carrier","C","N","Y",'
+            '"0 Abyss Alley","Nowhere","NY","12345","US","0 Abyss Alley",'
+            '"Nowhere","NY","12345","US","+123456789",'
+            '"+198765432","alicebrown@killercarrier.com","05-MAR-20",18725329,2020,'
+            '"04-FEB-19","MA",5,4\r\n',
         )
         self.assertEqual(
             second_line,
-            "43,Transport Greatness,,,Y,N,,,,,,,,,,,,,,,,,03-JAN-19,,,\r\n",
+            '43,"Transport Greatness","","","Y","N",'
+            '"","","","","","",'
+            '"","","","","",'
+            '"","","","","",'
+            '"03-JAN-19","","",""\r\n',
         )
 
 
