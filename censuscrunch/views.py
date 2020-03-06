@@ -33,8 +33,9 @@ class SearchView(ListView):
         return queryset
 
     def _filter_queryset(self, queryset):
-        queryset = self._filter_by_simple_search_term(queryset)
+        queryset = self._filter_by_state(queryset)
         queryset = self._filter_by_number_of_power_units(queryset)
+        queryset = self._filter_by_simple_search_term(queryset)
         return queryset
 
     def _filter_by_simple_search_term(self, queryset):
@@ -44,6 +45,12 @@ class SearchView(ListView):
                 Q(legal_name__icontains=search_term)
                 | Q(dba_name__icontains=search_term)
             )
+        return queryset
+
+    def _filter_by_state(self, queryset):
+        state = self.request.GET.get("state", "").strip()
+        if state:
+            queryset = queryset.filter(physical_state__iexact=state)
         return queryset
 
     def _filter_by_number_of_power_units(self, queryset):
@@ -78,6 +85,7 @@ class SearchView(ListView):
         context = super().get_context_data(**kwargs)
         context["row_limit"] = settings.CENSUSCRUNCH_ROW_LIMIT
         context["searched"] = bool(self.request.GET)
+        context["states"] = models.STATES
         return context
 
     def get_csv(self, *args, **kwargs):

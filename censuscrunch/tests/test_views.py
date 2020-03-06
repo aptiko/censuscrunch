@@ -18,6 +18,7 @@ class CarrierListViewTestCase(TestCase):
             number_of_power_units=5,
             legal_name="Killer Carrier, Inc",
             dba_name="Killer Carrier",
+            physical_state="NY",
         )
         mommy.make(
             models.Carrier,
@@ -26,6 +27,7 @@ class CarrierListViewTestCase(TestCase):
             number_of_power_units=10,
             legal_name="Transport Greatness",
             dba_name="",
+            physical_state="CA",
         )
         mommy.make(
             models.Carrier,
@@ -34,6 +36,7 @@ class CarrierListViewTestCase(TestCase):
             number_of_power_units=15,
             legal_name="Jociel",
             dba_name="Johnson Logistics",
+            physical_state="MA",
         )
 
     def test_no_queries_when_no_query(self):
@@ -51,6 +54,11 @@ class CarrierListViewTestCase(TestCase):
     def test_filter_by_max_number_of_power_units(self):
         r = self.client.get("/?max_number_of_power_units=11")
         self.assertContains(r, "2 records")
+
+    def test_filter_by_state(self):
+        r = self.client.get("/?state=ca")
+        self.assertContains(r, "1 records")
+        self.assertContains(r, "Transport Greatness")
 
     def test_link_to_detail(self):
         r = self.client.get("/?max_number_of_power_units=11")
