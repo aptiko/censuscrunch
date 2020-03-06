@@ -6,7 +6,7 @@
     <div class="field-body">
       <div class="field">
         <div class="control">
-          <input class="input" type="text" name="q" size=20>
+          <input class="input" type="text" name="q" size=20 value="{{ request.GET.q }}">
         </div>
       </div>
     </div>
@@ -22,7 +22,7 @@
             <select name="state">
               <option value="">Select state</option>
               {% for state in states %}
-                <option value="{{ state.0 }}">{{ state.1 }}</option>
+                <option value="{{ state.0 }}" {% if state.0 == request.GET.state %}selected{% endif %}>{{ state.1 }}</option>
               {% endfor %}
             </select>
           </div>
@@ -39,12 +39,12 @@
     <div class="field-body">
       <div class="field">
         <div class="control">
-          <input class="input" type="text" name="min_number_of_power_units" placeholder="Min" size="5">
+          <input class="input" type="text" name="min_number_of_power_units" placeholder="Min" size="5" value="{{ request.GET.min_number_of_power_units }}">
         </div>
       </div>
       <div class="field">
         <div class="control">
-          <input class="input" type="text" name="max_number_of_power_units" placeholder="Max" size="5">
+          <input class="input" type="text" name="max_number_of_power_units" placeholder="Max" size="5" value="{{ request.GET.max_number_of_power_units }}">
         </div>
       </div>
     </div>
