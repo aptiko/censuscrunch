@@ -10,6 +10,17 @@
 {% endblock %}
 
 
+{% block extrahead %}
+  {% if not searched %}
+    <meta property="og:title" content="The Census Crunch: Search the FMCSA census data">
+    <meta property="og:site_name" content="The Census Crunch">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://logisticsdatacrunch.com/wp-content/uploads/2020/03/censuscrunch-screenshot-1024x421.png">
+    <meta property="og:description" content="Search in 1.7 million U.S. transport businesses; the FMCSA census data for humans.">
+  {% endif %}
+{% endblock %}
+
+
 {% block content %}
   <h1 class="title">
     The Census Crunch
