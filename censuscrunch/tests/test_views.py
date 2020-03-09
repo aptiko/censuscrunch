@@ -6,7 +6,7 @@ from django.test import TestCase, override_settings
 from bs4 import BeautifulSoup
 from model_mommy import mommy
 
-from censuscrunch import models
+from censuscrunch import models, views
 
 
 class CarrierListViewTestCase(TestCase):
@@ -194,6 +194,191 @@ class CarrierListRowLimitTestCase(TestCase):
     def test_no_csv_results_if_above_row_limit(self):
         r = self.client.get("/?max_number_of_power_units=15&format=csv")
         self.assertEqual(r.status_code, 400)
+
+
+class CarrierListPaginationTestCaseBase(TestCase):
+    def setUp(self):
+        self._set_paginate_by()
+        self._create_carriers()
+
+    def tearDown(self):
+        self._restore_paginate_by()
+
+    def _set_paginate_by(self):
+        self.saved_paginate_by = views.SearchView.paginate_by
+        views.SearchView.paginate_by = 1
+
+    def _restore_paginate_by(self):
+        views.SearchView.paginate_by = self.saved_paginate_by
+
+    def _create_carriers(self):
+        for i in range(6):
+            mommy.make(models.Carrier, legal_name="a")
+
+    def _get_expected_link(self, number, is_current):
+        is_current_text = is_current and " is-current" or ""
+        aria_label = is_current and f"Page {number}" or f"Go to page {number}"
+        href = is_current and " " or f'href="?q=a&amp;page={number}"'
+        return (
+            f'<a class="pagination-link{is_current_text}" '
+            f'aria-label="{aria_label}" {href}>{number}</a>'
+        )
+
+
+class CarrierListPaginationPageOne(CarrierListPaginationTestCaseBase):
+    def setUp(self):
+        super().setUp()
+        self.r = self.client.get("/?q=a")
+
+    def test_page_has_1(self):
+        self.assertContains(self.r, self._get_expected_link(1, True), html=True)
+
+    def test_page_has_2(self):
+        self.assertContains(self.r, self._get_expected_link(2, False), html=True)
+
+    def test_page_has_no_3(self):
+        self.assertNotContains(self.r, "age 3")
+
+    def test_page_has_ellipsis(self):
+        self.assertContains(self.r, "&hellip;")
+
+    def test_page_has_6(self):
+        self.assertContains(self.r, self._get_expected_link(6, False), html=True)
+
+
+class CarrierListPaginationPageTwo(CarrierListPaginationTestCaseBase):
+    def setUp(self):
+        super().setUp()
+        self.r = self.client.get("/?q=a&page=2")
+
+    def test_page_has_1(self):
+        self.assertContains(self.r, self._get_expected_link(1, False), html=True)
+
+    def test_page_has_2(self):
+        self.assertContains(self.r, self._get_expected_link(2, True), html=True)
+
+    def test_page_has_3(self):
+        self.assertContains(self.r, self._get_expected_link(3, False), html=True)
+
+    def test_page_has_no_4(self):
+        self.assertNotContains(self.r, "age 4")
+
+    def test_page_has_ellipsis(self):
+        self.assertContains(self.r, "&hellip;")
+
+    def test_page_has_no_5(self):
+        self.assertNotContains(self.r, "age 5")
+
+    def test_page_has_6(self):
+        self.assertContains(self.r, self._get_expected_link(6, False), html=True)
+
+
+class CarrierListPaginationPageThree(CarrierListPaginationTestCaseBase):
+    def setUp(self):
+        super().setUp()
+        self.r = self.client.get("/?q=a&page=3")
+
+    def test_page_has_1(self):
+        self.assertContains(self.r, self._get_expected_link(1, False), html=True)
+
+    def test_page_has_2(self):
+        self.assertContains(self.r, self._get_expected_link(2, False), html=True)
+
+    def test_page_has_3(self):
+        self.assertContains(self.r, self._get_expected_link(3, True), html=True)
+
+    def test_page_has_4(self):
+        self.assertContains(self.r, self._get_expected_link(4, False), html=True)
+
+    def test_page_has_no_5(self):
+        self.assertNotContains(self.r, "age 5")
+
+    def test_page_has_ellipsis(self):
+        self.assertContains(self.r, "&hellip;")
+
+    def test_page_has_6(self):
+        self.assertContains(self.r, self._get_expected_link(6, False), html=True)
+
+
+class CarrierListPaginationPageFour(CarrierListPaginationTestCaseBase):
+    def setUp(self):
+        super().setUp()
+        self.r = self.client.get("/?q=a&page=4")
+
+    def test_page_has_1(self):
+        self.assertContains(self.r, self._get_expected_link(1, False), html=True)
+
+    def test_page_has_no_2(self):
+        self.assertNotContains(self.r, "age 2")
+
+    def test_page_has_ellipsis(self):
+        self.assertContains(self.r, "&hellip;")
+
+    def test_page_has_3(self):
+        self.assertContains(self.r, self._get_expected_link(3, False), html=True)
+
+    def test_page_has_4(self):
+        self.assertContains(self.r, self._get_expected_link(4, True), html=True)
+
+    def test_page_has_5(self):
+        self.assertContains(self.r, self._get_expected_link(5, False), html=True)
+
+    def test_page_has_6(self):
+        self.assertContains(self.r, self._get_expected_link(6, False), html=True)
+
+
+class CarrierListPaginationPageFive(CarrierListPaginationTestCaseBase):
+    def setUp(self):
+        super().setUp()
+        self.r = self.client.get("/?q=a&page=5")
+
+    def test_page_has_1(self):
+        self.assertContains(self.r, self._get_expected_link(1, False), html=True)
+
+    def test_page_has_no_2(self):
+        self.assertNotContains(self.r, "age 2")
+
+    def test_page_has_no_3(self):
+        self.assertNotContains(self.r, "age 3")
+
+    def test_page_has_ellipsis(self):
+        self.assertContains(self.r, "&hellip;")
+
+    def test_page_has_4(self):
+        self.assertContains(self.r, self._get_expected_link(4, False), html=True)
+
+    def test_page_has_5(self):
+        self.assertContains(self.r, self._get_expected_link(5, True), html=True)
+
+    def test_page_has_6(self):
+        self.assertContains(self.r, self._get_expected_link(6, False), html=True)
+
+
+class CarrierListPaginationPageSix(CarrierListPaginationTestCaseBase):
+    def setUp(self):
+        super().setUp()
+        self.r = self.client.get("/?q=a&page=6")
+
+    def test_page_has_1(self):
+        self.assertContains(self.r, self._get_expected_link(1, False), html=True)
+
+    def test_page_has_no_2(self):
+        self.assertNotContains(self.r, "age 2")
+
+    def test_page_has_no_3(self):
+        self.assertNotContains(self.r, "age 3")
+
+    def test_page_has_no_4(self):
+        self.assertNotContains(self.r, "age 4")
+
+    def test_page_has_ellipsis(self):
+        self.assertContains(self.r, "&hellip;")
+
+    def test_page_has_5(self):
+        self.assertContains(self.r, self._get_expected_link(5, False), html=True)
+
+    def test_page_has_6(self):
+        self.assertContains(self.r, self._get_expected_link(6, True), html=True)
 
 
 class CarrierDetailTestCase(TestCase):

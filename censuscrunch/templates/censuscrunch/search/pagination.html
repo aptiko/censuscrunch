@@ -1,0 +1,64 @@
+{% load pagination %}
+
+<nav class="pagination" role="navigation" aria-label="pagination">
+
+  {% if page_obj.has_previous %}
+    <a class="pagination-previous" href="?{% urlparams_set_page page_obj.previous_page_number %}">Previous</a>
+  {% else %}
+    <a class="pagination-previous" disabled>Previous</a>
+  {% endif %}
+
+  {% if page_obj.has_next %}
+    <a class="pagination-next" href="?{% urlparams_set_page page_obj.next_page_number %}">Next page</a>
+  {% else %}
+    <a class="pagination-next" disabled>Next page</a>
+  {% endif %}
+
+  {% if page_obj.has_previous or page_obj.has_next %}
+    {% with n=page_obj.number %}
+      <ul class="pagination-list">
+        <li>
+          {% if n == 1 %}
+            <a class="pagination-link is-current" aria-label="Page 1">1</a>
+          {% else %}
+            <a class="pagination-link" aria-label="Go to page 1" href="?{% urlparams_set_page 1 %}">1</a>
+          {% endif %}
+        </li>
+        {% if n > 3 %}
+          <li>
+            <span class="pagination-ellipsis">&hellip;</span>
+          </li>
+        {% endif %}
+        {% if n > 2 %}
+          <li>
+            <a class="pagination-link" aria-label="Go to page {{ n|add:-1 }}" href="?{% urlparams_set_page n|add:-1 %}">{{ n|add:-1 }}</a>
+          </li>
+        {% endif %}
+        {% if n > 1 and n < page_obj.paginator.num_pages %}
+          <li>
+            <a class="pagination-link is-current" aria-label="Page {{ n }}">{{ n }}</a>
+          </li>
+        {% endif %}
+        {% if n < page_obj.paginator.num_pages|add:-1 %}
+          <li>
+            <a class="pagination-link" aria-label="Go to page {{ n|add:1 }}" href="?{% urlparams_set_page n|add:1 %}">{{ n|add:1 }}</a>
+          </li>
+        {% endif %}
+        {% if n < page_obj.paginator.num_pages|add:-2 %}
+          <li>
+            <span class="pagination-ellipsis">&hellip;</span>
+          </li>
+        {% endif %}
+        {% if page_obj.paginator.num_pages > 1 %}
+          <li>
+            {% if n == page_obj.paginator.num_pages %}
+              <a class="pagination-link is-current" aria-label="Page {{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+            {% else %}
+              <a class="pagination-link" aria-label="Go to page {{ page_obj.paginator.num_pages }}" href="?{% urlparams_set_page page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+            {% endif %}
+          </li>
+        {% endif %}
+      </ul>
+    {% endwith %}
+  {% endif %}
+</nav>
