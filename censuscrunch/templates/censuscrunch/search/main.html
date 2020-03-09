@@ -2,7 +2,11 @@
 {% load humanize %}
 
 {% block title %}
-  Carrier list
+  {% if searched %}
+    Search results
+  {% else %}
+    Search the FMCSA census data
+  {% endif %}
 {% endblock %}
 
 
